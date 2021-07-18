@@ -1,0 +1,88 @@
+name: Django Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+  
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_USER: test
+          POSTGRES_PASSWORD: test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      memcached:
+        image: memcached:latest
+        ports:
+          - 11211:11211
+        options: >-
+          --health-cmd "timeout 5 bash -c 'cat < /dev/null > /dev/udp/127.0.0.1/11211'"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      rabbitmq:
+        image: rabbitmq:latest
+        env:
+          RABBITMQ_DEFAULT_USER: test
+          RABBITMQ_DEFAULT_PASSWORD: test
+          RABBITMQ_DEFAULT_VHOST: test
+        ports:
+          - 5672:5672
+        options: >-
+          --health-cmd "rabbitmqctl node_health_check"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Python 3.8
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.8
+
+      - name: Install prerequisites
+        run: |
+          sudo apt-get install libmemcached-dev
+
+      - name: Load Python packages from cache
+        uses: actions/cache@v2
+        id: pipcache
+        with:
+          {% verbatim %}path: ${% templatetag openvariable %} env.pythonLocation }}
+          key: ${{ runner.os }}-pip-${{ env.pythonLocation }}-${{ hashFiles('poetry.lock') }}{% endverbatim %}
+
+      - name: Install Python packages
+        run: |
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry export > ~/requirements.txt
+          pip install -r ~/requirements.txt
+
+      - name: Run Django tests
+        env:
+          {{ project_name | upper }}_DEBUG: False
+          {{ project_name | upper }}_DB_NAME: test
+          {{ project_name | upper }}_DB_USER: test
+          {{ project_name | upper }}_DB_PASSWORD: test
+          {{ project_name | upper }}_DB_HOST: 127.0.0.1
+          {{ project_name | upper }}_DB_PORT: 5432
+          {{ project_name | upper }}_MEMCACHED_SOCKET: 127.0.0.1:11211
+          {{ project_name | upper }}_CELERY_USER: test
+          {{ project_name | upper }}_CELERY_PASSWORD: test
+          {{ project_name | upper }}_CELERY_HOST: 127.0.0.1
+          {{ project_name | upper }}_CELERY_VHOST: test
+        run: |
+          python manage.py test
