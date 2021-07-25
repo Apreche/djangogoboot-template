@@ -4,6 +4,7 @@
     pkg:
     - libpq-dev
     - python3-psycopg2
+    state: latest
   become: yes
 
 - name: Create PostgreSQL database

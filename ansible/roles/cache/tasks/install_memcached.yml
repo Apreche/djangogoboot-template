@@ -2,7 +2,7 @@
 - name: Install memcached
   ansible.builtin.apt:
     name: memcached
-    state: present
+    state: latest
     update_cache: yes
   become: yes
 
