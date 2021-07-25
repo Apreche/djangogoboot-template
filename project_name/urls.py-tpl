@@ -23,7 +23,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("admin/doc/", include("django.contrib.admindocs.urls")),
     path(
-        "robots\.txt",
+        "robots.txt",
         TemplateView.as_view(template_name="robots.txt", content_type="text/plain"),
     ),
 ] + static(
