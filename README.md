@@ -6,4 +6,4 @@ See the Djangogoboot project at [https://github.com/Apreche/djangogoboot/](https
 
 ## Using without Djangogoboot
 
-It is possible to use this template on its own without Djangogoboot, but it will be quiet tedious. If that's really a road you would liek to go down, the source code of Djangogoboot is effectively the documentation for this process.
+It is possible to use this template on its own without Djangogoboot, but it will be quiet tedious. If that's really a road you would like to go down, the source code of Djangogoboot is effectively the documentation for this process.
