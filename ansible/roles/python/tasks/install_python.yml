@@ -14,6 +14,7 @@
     - python3-pip
     - python3-setuptools
     - python3-venv
+    state: latest
   become: yes
 
 - name: Set python3 as default
@@ -39,6 +40,7 @@
     - tk-dev
     - python3-tk
     - zlib1g-dev
+    state: latest
   become: yes
 
 - name: Upgrade pip using pip

@@ -2,7 +2,7 @@
 - name: Install rabbitmq
   ansible.builtin.apt:
     name: rabbitmq-server
-    state: present
+    state: latest
     update_cache: yes
   become: yes
 
