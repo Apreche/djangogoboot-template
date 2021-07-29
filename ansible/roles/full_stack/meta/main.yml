@@ -9,4 +9,5 @@ dependencies:
   - role: migrator
   - role: worker
   - role: web
+  - role: firewall
 ...

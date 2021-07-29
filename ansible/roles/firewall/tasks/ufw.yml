@@ -1,0 +1,39 @@
+---
+- name: Firewall limit SSH
+  community.general.ufw:
+    rule: limit
+    port: "{{ ssh_port }}"
+    proto: tcp
+  become: yes
+
+- name: Firewall allow HTTP
+  community.general.ufw:
+    rule: allow
+    port: '80'
+    proto: tcp
+  become: yes
+
+- name: Firewall allow HTTPS
+  community.general.ufw:
+    rule: allow
+    port: '443'
+    proto: tcp
+  become: yes
+
+- name: Firewall allow outgoing default
+  community.general.ufw:
+    policy: allow
+    direction: outgoing
+  become: yes
+
+- name: Firewall deny incoming default
+  community.general.ufw:
+    policy: deny
+    direction: incoming
+  become: yes
+
+- name: Enable firewall
+  community.general.ufw:
+    state: enabled
+  become: yes
+...

@@ -43,4 +43,5 @@ jobs:
           DEPLOY_SSH_PRIVATE_KEY: ${{secrets.DEPLOY_SSH_PRIVATE_KEY}}
           WEB_DOMAIN: ${{secrets.WEB_DOMAIN}}
           EMAIL_ADDRESS: ${{secrets.EMAIL_ADDRESS}}
+          SSH_PORT: ${{secrets.ANSIBLE_SSH_PORT}}
 ...
